@@ -55,7 +55,7 @@ Para compilar este proyecto, se requiere la siguiente configuración de entorno:
 
 Para garantizar la transparencia y reproducibilidad del proyecto, se incluye el código fuente utilizado para el entrenamiento del modelo en Google Colab.
 
-* **Ubicación:** [`notebooks/notebooks.ipynb`](notebooks/notebooks.ipynb)
+* **Ubicación:** [`notebooks/Entrenamiento_YOLOv8_Maquinaria.ipynb`](notebooks/Entrenamiento_YOLOv8_Maquinaria)
 * **Contenido del Cuaderno:**
     1.  Descarga automatizada del dataset "Construction Site Safety" desde Roboflow.
     2.  Configuración del entorno YOLOv8 (Ultralytics).
