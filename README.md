@@ -51,7 +51,19 @@ Para compilar este proyecto, se requiere la siguiente configuración de entorno:
     * El proyecto espera encontrar **OpenCV Android SDK** en: `C:/OpenCV`
     * El proyecto espera encontrar **ONNX Runtime (Headers + JNI)** en: `C:/ONNX`
     * *(Nota: Si sus rutas son diferentes, por favor modifique el archivo `CMakeLists.txt`)*.
+## 📓 Evidencia de Entrenamiento y Reproducibilidad
 
+Para garantizar la transparencia y reproducibilidad del proyecto, se incluye el código fuente utilizado para el entrenamiento del modelo en Google Colab.
+
+* **Ubicación:** [`notebooks/notebooks.ipynb`](notebooks/notebooks.ipynb)
+* **Contenido del Cuaderno:**
+    1.  Descarga automatizada del dataset "Construction Site Safety" desde Roboflow.
+    2.  Configuración del entorno YOLOv8 (Ultralytics).
+    3.  Entrenamiento del modelo `yolov8n.pt` durante 25 épocas.
+    4.  **Exportación a ONNX:** Script de conversión con `opset=12` para compatibilidad con C++ nativo.
+
+> **Nota:** Este cuaderno demuestra que el modelo `.onnx` incluido en la aplicación es resultado de un proceso de *Fine-Tuning* propio y no un modelo genérico descargado de internet.
+> 
 ## 📸 Evidencia de Funcionamiento
 El sistema realiza inferencia en tiempo real visualizando:
 * Bounding Boxes con colores por clase.
