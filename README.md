@@ -19,7 +19,7 @@ Este proyecto cumple con los requisitos de la categoría "Avanzado":
 
 ## 📓 Evidencia de Entrenamiento y Reproducibilidad
 El código utilizado para entrenar el modelo se encuentra disponible en el repositorio:
-* **Archivo:** [`notebooks/notebooks.ipynb`](notebooks/notebooks.ipynb)
+* **Archivo:** [`notebooks/Entrenamiento_YOLOv8_Maquinaria.ipynb`](notebooks/Entrenamiento_YOLOv8_Maquinaria.ipynb)
 * **Proceso:** Descarga desde Roboflow API, entrenamiento con Ultralytics YOLOv8 y exportación a formato ONNX (Opset 12).
 
 ## 🏗️ Clases Detectadas
