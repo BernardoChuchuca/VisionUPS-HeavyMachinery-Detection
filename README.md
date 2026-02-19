@@ -7,68 +7,47 @@
 ## 📋 Descripción del Proyecto
 Aplicación móvil nativa para la detección de objetos en tiempo real, enfocada en **Seguridad Industrial y Maquinaria Pesada**.
 
-A diferencia de las implementaciones estándar en Java/Kotlin, este proyecto ejecuta todo el pipeline de visión artificial (Pre-procesamiento, Inferencia y Post-procesamiento) en la **capa nativa (C++)** utilizando **ONNX Runtime** y **OpenCV**, maximizando el rendimiento en dispositivos con recursos limitados.
+Este proyecto ejecuta todo el pipeline de visión artificial (Pre-procesamiento, Inferencia y Post-procesamiento) en la **capa nativa (C++)** utilizando **ONNX Runtime** y **OpenCV**, maximizando el control sobre el hardware del dispositivo.
 
 ## 🚀 Características Técnicas (Nivel Avanzado)
-Este proyecto cumple con los requisitos de la categoría "Avanzado" de la rúbrica:
+Este proyecto cumple con los requisitos de la categoría "Avanzado":
 
-* **🧠 Motor de Inferencia Nativo:** Uso de `ONNX Runtime C++ API` a través de JNI. No se utiliza TensorFlow Lite ni interpretadores Java.
-* **🎯 Modelo Personalizado:** YOLOv8 Nano (`yolov8n`) re-entrenado con un dataset específico de **Construction Site Safety** (exclusivo para este examen).
-* **⚙️ Procesamiento en C++:**
-    * **Pre-procesamiento:** Resize, Normalización y conversión RGBA -> RGB con OpenCV.
-    * **Post-procesamiento:** Implementación manual de **Non-Maximum Suppression (NMS)** usando `cv::dnn::NMSBoxes` para filtrar detecciones duplicadas.
-* **⚡ Rendimiento:** Optimizado para correr en CPU móvil (probado en Tecno Pop 8).
+* **🧠 Motor de Inferencia Nativo:** Uso de `ONNX Runtime C++ API` a través de JNI.
+* **🎯 Modelo Personalizado:** YOLOv8 Nano (`yolov8n`) re-entrenado con dataset específico de construcción.
+* **⚙️ Procesamiento en C++:** Implementación manual de **NMS (Non-Maximum Suppression)** para filtrar detecciones.
+* **📓 Evidencia de Entrenamiento:** Se incluye el cuaderno de Jupyter con el proceso de Fine-Tuning y exportación.
 
-## 🏗️ Clases Detectadas (Dataset Propio)
-El modelo ha sido entrenado para detectar 15 clases críticas en una obra de construcción:
+## 📓 Evidencia de Entrenamiento y Reproducibilidad
+El código utilizado para entrenar el modelo se encuentra disponible en el repositorio:
+* **Archivo:** [`notebooks/notebooks.ipynb`](notebooks/notebooks.ipynb)
+* **Proceso:** Descarga desde Roboflow API, entrenamiento con Ultralytics YOLOv8 y exportación a formato ONNX (Opset 12).
 
-1.  `Excavator` (Excavadora)
-2.  `Dump Truck` (Volqueta)
-3.  `Front End Loader` (Cargadora Frontal)
-4.  `Bulldozer` (Topadora/Oruga)
-5.  `Concrete Mixer` (Mixer)
-6.  `Crane` (Grúa)
-7.  `Tractor Trailer` (Trailer)
-8.  `Skid Steer` (Minicargadora)
-9.  `Hard Hat ON/OFF` (Uso de Casco)
-10. `Safety Vest ON/OFF` (Uso de Chaleco)
-11. `Gloves ON/OFF` (Uso de Guantes)
-12. `Worker` (Trabajador)
+## 🏗️ Clases Detectadas
+El modelo detecta 15 clases críticas:
+1. `Excavator` (Excavadora)
+2. `Dump Truck` (Volqueta)
+3. `Front End Loader` (Cargadora)
+4. `Hard Hat ON/OFF` (Casco)
+5. `Safety Vest ON/OFF` (Chaleco)
+6. `Gloves ON/OFF` (Guantes)
+7. `Worker` (Trabajador)
+... entre otras.
 
-## 📂 Estructura del Código (Entregables)
-Siguiendo los requisitos del examen, los archivos críticos se encuentran en:
+## 📂 Estructura del Código
+* **Lógica C++:** [`app/src/main/cpp/native-lib.cpp`](app/src/main/cpp/native-lib.cpp) (Inferencia y NMS).
+* **Modelo:** [`app/src/main/assets/yolov8n.onnx`](app/src/main/assets/yolov8n.onnx).
+* **Entrenamiento:** [`notebooks/`](notebooks/).
 
-* **Lógica C++ / JNI:** [`app/src/main/cpp/native-lib.cpp`](app/src/main/cpp/native-lib.cpp) (Contiene la carga del modelo, pre-proceso e inferencia).
-* **Modelo Entrenado:** [`app/src/main/assets/yolov8n.onnx`](app/src/main/assets/yolov8n.onnx) (Archivo binario del modelo exportado).
-* **Configuración de Build:** [`app/src/main/cpp/CMakeLists.txt`](app/src/main/cpp/CMakeLists.txt) (Enlace de librerías nativas).
+## ⚙️ Notas sobre Rendimiento y Hardware
+El código fuente incluye la implementación para aceleración por hardware (**NNAPI**) y soporte para modelos **FP16**.
+> *Nota: Para la demostración en el dispositivo de prueba (Tecno Pop 8), se ha forzado la ejecución en **CPU con precisión FP32** para garantizar la estabilidad de los drivers, priorizando la robustez de la detección sobre la tasa de cuadros (FPS).*
 
 ## 🛠️ Requisitos de Compilación
-Para compilar este proyecto, se requiere la siguiente configuración de entorno:
-
-1.  **Android Studio:** Versión Iguana o superior.
-2.  **NDK:** Versión 26.x.
-3.  **Librerías Externas (Rutas Absolutas):**
-    * El proyecto espera encontrar **OpenCV Android SDK** en: `C:/OpenCV`
-    * El proyecto espera encontrar **ONNX Runtime (Headers + JNI)** en: `C:/ONNX`
-    * *(Nota: Si sus rutas son diferentes, por favor modifique el archivo `CMakeLists.txt`)*.
-## 📓 Evidencia de Entrenamiento y Reproducibilidad
-
-Para garantizar la transparencia y reproducibilidad del proyecto, se incluye el código fuente utilizado para el entrenamiento del modelo en Google Colab.
-
-* **Ubicación:** [`notebooks/Entrenamiento_YOLOv8_Maquinaria.ipynb`](notebooks/Entrenamiento_YOLOv8_Maquinaria)
-* **Contenido del Cuaderno:**
-    1.  Descarga automatizada del dataset "Construction Site Safety" desde Roboflow.
-    2.  Configuración del entorno YOLOv8 (Ultralytics).
-    3.  Entrenamiento del modelo `yolov8n.pt` durante 25 épocas.
-    4.  **Exportación a ONNX:** Script de conversión con `opset=12` para compatibilidad con C++ nativo.
-
-> **Nota:** Este cuaderno demuestra que el modelo `.onnx` incluido en la aplicación es resultado de un proceso de *Fine-Tuning* propio y no un modelo genérico descargado de internet.
-> 
-## 📸 Evidencia de Funcionamiento
-El sistema realiza inferencia en tiempo real visualizando:
-* Bounding Boxes con colores por clase.
-* Etiqueta de la clase y porcentaje de confianza.
-* Contador de FPS y cantidad de objetos detectados.
+1.  **Android Studio** Iguana+.
+2.  **NDK** v26.x.
+3.  **Librerías Externas (en C:/):**
+    * OpenCV Android SDK (`C:/OpenCV`)
+    * ONNX Runtime (`C:/ONNX`)
 
 ---
 *Desarrollado para la materia de Sistemas Inteligentes - 2026*
